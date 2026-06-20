@@ -160,27 +160,7 @@ e.g.: geo-matres_full_bert_seed_123.ipynb        → MATRES, full model, BERT, s
 
 ## 5. Model Architecture (`GeoTREModel`)
 
-```
-                    ┌────────────────────────────────────────┐
-   input text  ───► │  Encoder (BERT / RoBERTa)              │
-   (+ <e1><e2>)     └────────────────────────────────────────┘
-                                   │ hidden states
-                ┌──────────────────┴──────────────────┐
-                ▼                                      ▼
-       <e1> token vector                      <e2> token vector
-                │  top-k cross-attention (context enrichment)
-                ▼                                      ▼
-            h1 (rich)                              h2 (rich)
-        ┌───────┴────────┐                  ┌────────┴───────┐
-        ▼                ▼                  ▼                ▼
-   geo_head          cls_head          geo_head         (cls/vague)
-   → (s1, e1)     ┌─►  [h1 ; h2] ──► logits_semantic  → (s2, e2)
-                  │                          │
-                  │   logits_geometric ◄─── Allen formulas(s1,e1,s2,e2)
-                  │   logits_vague     ◄─── vague_head([h1 ; h2])
-                  ▼
-            Ensemble (α) → final prediction
-```
+<img width="1123" height="511" alt="1779276783258_7888937454975708662_g7789413039228685972_e76da13ff536e24165b8358d6a871318" src="https://github.com/user-attachments/assets/621d39bd-39d6-4219-8027-4f26480fec4d" />
 
 **Key components:**
 - `encoder`: BERT-base-uncased or RoBERTa-base (embeddings resized for 4 special tokens).
