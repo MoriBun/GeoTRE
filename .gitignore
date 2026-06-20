@@ -1,0 +1,23 @@
+# Thư mục KHÔNG đẩy lên GitHub
+/Quyển và tóm tắt/
+/Slide/
+
+# Python / Jupyter
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+*.pth
+*.pt
+*.ckpt
+
+# Môi trường
+.venv/
+venv/
+env/
+.env
+
+# Hệ điều hành / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
