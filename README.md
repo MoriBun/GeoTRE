@@ -163,12 +163,13 @@ e.g.: geo-matres_full_bert_seed_123.ipynb        → MATRES, full model, BERT, s
 <img width="1123" height="511" alt="1779276783258_7888937454975708662_g7789413039228685972_e76da13ff536e24165b8358d6a871318" src="https://github.com/user-attachments/assets/621d39bd-39d6-4219-8027-4f26480fec4d" />
 
 **Key components:**
-- `encoder`: BERT-base-uncased or RoBERTa-base (embeddings resized for 4 special tokens).
-- `cross_attn`: MultiheadAttention (8 heads) enriching event representations with context.
-- `geo_head`: produces the `(s, e)` coordinates.
-- `cls_head`: the semantic classification branch.
-- `vague_head`: binary branch separating VAGUE.
-- `simul_threshold`, `geo_temp`: learnable tolerance / temperature parameters.
+
+- **Encoder** — BERT-base-uncased or RoBERTa-base; encodes the input text (with `<e1>`/`<e2>` markers) and yields the two event representations **h₁, h₂** (enriched via top-k cross-attention over the context).
+- **Geometric Branch** — each representation passes through an **FFN** (`geo_head`) that predicts an interval coordinate **(sᵢ, eᵢ)** on the timeline. The **Allen Interval Decoder** then turns the two intervals into relation logits using explicit interval-algebra formulas, followed by a Softmax.
+- **Semantic Branch** — the two representations are concatenated (**⊕**, `[h₁ ; h₂]`), passed through an **FFN** (`cls_head`), and a Softmax to predict the relation directly from context.
+- **Late Fusion** — the two branches' probability distributions are combined with a learned weight **α** (tuned on the validation set) to produce the final relation (BEFORE / AFTER / overlap relations …).
+- **Auxiliary** — a `vague_head` (binary VAGUE vs. non-VAGUE separation) and the learnable parameters `simul_threshold` and `geo_temp` inside the Allen decoder (tolerance / temperature).
+
 
 ---
 
